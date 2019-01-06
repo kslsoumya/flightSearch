@@ -1,0 +1,20 @@
+<div class="card">
+    <div class="flightDetail">
+      <div class="airlines">
+        <h5 >{{flightDetails.Id.slice(0,5)}}</h5>
+        <h6>{{flightDetails.Airlines}}</h6>
+      </div>
+      <div class="airlines">
+        <h5>{{flightDetails.Departure}}</h5>
+        <small>NonStop</small>
+      </div>
+      <div class="airlines">
+        <h5>{{flightDetails.Arrival}}</h5>
+        <small>{{flightDetails.Duration}}</small>
+      </div>
+      <div class="priceButton">
+        <h6>{{flightDetails.Price}}</h6>
+        <button mat-stroked-button color="primary">Book Now</button>
+      </div>
+    </div>
+    </div>

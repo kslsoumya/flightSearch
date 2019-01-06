@@ -1,0 +1,196 @@
+<nav class="navbar navbar-light">
+  <span class="navbar-text mx-auto" style="color:white">
+    <h4>Book Your Flight</h4>
+  </span>
+</nav>
+<br />
+<div class="container-fluid">
+
+  <div class="row" [ngStyle]="{'justify-content': !filteredFlights?'center':''}">
+    <div class="col-md-4" *ngIf="!isRoundTrip">
+      <mat-tab-group>
+        <mat-tab label="One Way">
+          <form #searchForm="ngForm" (ngSubmit)="searchFlights()" class="flightForm">
+            <mat-form-field class="formWidth">
+              <mat-select placeholder="From" [(ngModel)]="fromCity" name="Fcity" #fcity="ngModel" required>
+                <mat-option *ngFor="let city of citiesList" [value]="city">
+                  {{city}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="formWidth">
+              <mat-select placeholder="To" [(ngModel)]="toCity" name="Tcity" #tcity="ngModel" required>
+                <mat-option *ngFor="let city of citiesList" [value]="city">
+                  {{city}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div *ngIf="tcity.value===fcity.value && tcity.value && fcity.value" class="alert alert-danger">
+              From and To Cities cannot be same
+            </div>
+            <mat-form-field class="formWidth">
+              <input matInput [matDatepicker]="picker3" placeholder="Depart" [(ngModel)]="departDate" name="Departdate"
+                required>
+              <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+              <mat-datepicker #picker3></mat-datepicker>
+            </mat-form-field>
+
+
+            <mat-form-field class="formWidth">
+              <input matInput type="number" placeholder="Passengers" [(ngModel)]="passengers" name="pass">
+            </mat-form-field>
+            <mat-form-field class="formWidth">
+              <mat-select placeholder="Class" [(ngModel)]="travelClass" name="Tclass">
+                <mat-option *ngFor="let class of classList" [value]="class">
+                  {{class}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button class="btn btn-danger btn-block" type="submit" [disabled]="!searchForm.form.valid">Search</button>
+          </form>
+
+        </mat-tab>
+        <mat-tab label="Round Trip">
+          <form class="flightForm" #roundTripform="ngForm" (ngSubmit)="roundTripSearch()">
+            <mat-form-field class="formWidth">
+              <mat-select placeholder="From" [(ngModel)]="fromCity" name="Fcity" #fcity="ngModel" required>
+                <mat-option *ngFor="let city of citiesList" [value]="city">
+                  {{city}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="formWidth">
+              <mat-select placeholder="To" [(ngModel)]="toCity" name="Tcity" #tcity="ngModel" required>
+                <mat-option *ngFor="let city of citiesList" [value]="city">
+                  {{city}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div *ngIf="tcity.value===fcity.value && tcity.value && fcity.value" class="alert alert-danger">
+              From and To Cities cannot be same
+            </div>
+            <mat-form-field class="formWidth">
+              <input matInput [matDatepicker]="picker" placeholder="Depart" [(ngModel)]="departDate" name="Departdate"
+                required>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+
+            <mat-form-field class="formWidth">
+              <input matInput [matDatepicker]="picker2" placeholder="Return" [(ngModel)]="returnDate" name="Returndate"
+                required>
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+
+
+            <mat-form-field class="formWidth">
+              <input matInput placeholder="Passengers" type="number" [(ngModel)]="passengers" name="pass">
+            </mat-form-field>
+            <mat-form-field class="formWidth">
+              <mat-select placeholder="Class" [(ngModel)]="travelClass" name="Tclass">
+                <mat-option *ngFor="let class of classList" [value]="class">
+                  {{class}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button class="btn btn-danger  btn-block" type="submit" [disabled]="!roundTripform.form.valid">Search</button>
+          </form>
+        </mat-tab>
+      </mat-tab-group>
+      <br />
+    </div>
+    <div class="col-md-8 list" style="text-align: center" *ngIf="filteredFlights && !isRoundTrip">
+      <h5 class="results">Flight Results</h5>
+
+
+      <div *ngIf="filteredFlights.length===0">
+        <h5 class="margin-top:4rem;"> Sorry,No Flights Found!!!</h5>
+      </div>
+      <div *ngIf="filteredFlights.length!==0 ">
+        <ng5-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options" (userChangeEnd)="priceChange($event)"></ng5-slider>
+        <br />
+        <h6><strong>Departure Date : </strong>{{departDate.toString().slice(0,15)}}</h6>
+        <div *ngFor="let flight of filteredFlights">
+          <app-flight-detail [flightDetails]="flight"></app-flight-detail><br /><br />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row roundTrip" *ngIf="(oneWayFlights || returnFlights) && isRoundTrip">
+
+    <mat-form-field>
+      <mat-select placeholder="From" [(ngModel)]="fromCity" name="Fcity" #fcity="ngModel" required>
+        <mat-option *ngFor="let city of citiesList" [value]="city">
+          {{city}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="To" [(ngModel)]="toCity" name="Tcity" #tcity="ngModel" required>
+        <mat-option *ngFor="let city of citiesList" [value]="city">
+          {{city}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div *ngIf="tcity.value===fcity.value && tcity.value && fcity.value" class="alert alert-danger">
+      From and To Cities cannot be same
+    </div>
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker" placeholder="Depart" [(ngModel)]="departDate" name="Departdate"
+        (ngModelChange)="inputChange()" required>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker2" placeholder="Return" [(ngModel)]="returnDate" name="Returndate"
+        (ngModelChange)="inputChange()">
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+    </mat-form-field>
+
+    <button class="btn btn-danger" [disabled]="shouldDisable" (click)="flightSearch()">Search</button>
+  </div>
+  <div class="row" *ngIf="(oneWayFlights || returnFlights) && isRoundTrip">
+    <div class="col basicDetails">
+      <ng5-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options" (userChangeEnd)="priceChange($event)"></ng5-slider>
+      <div>
+        <h6 *ngIf="departDate"><strong>Departure Date : </strong> {{departDate.toString().slice(0,15)}}</h6>
+        <h6 *ngIf="returnDate"><strong>Return Date : </strong> {{returnDate.toString().slice(0,16)}}</h6>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="(oneWayFlights || returnFlights) && isRoundTrip" style="justify-content: center">
+    <h4 style="text-decoration: underline">
+      Flight Results
+    </h4>
+  </div>
+  <br />
+
+
+  <div class="row" *ngIf="(oneWayFlights || returnFlights) && isRoundTrip">
+    <div class="col-md-6 centre">
+      <h6>{{this.fromCity}} to {{this.toCity}}</h6>
+      <div *ngFor="let flight of oneWayFlights">
+        <app-flight-detail [flightDetails]="flight"></app-flight-detail>
+        <br /><br />
+      </div>
+      <div *ngIf="oneWayFlights.length===0">
+        <h5 class="margin-top:4rem;"> Sorry,No Flights Found!!!</h5>
+      </div>
+    </div>
+    <div class="col-md-6 centre">
+      <h6>{{this.toCity}} to {{this.fromCity}}</h6>
+      <div *ngFor="let flight of returnFlights">
+        <app-flight-detail [flightDetails]="flight"></app-flight-detail>
+        <br /><br />
+      </div>
+      <div *ngIf="returnFlights.length===0">
+        <h5 class="margin-top:4rem;"> Sorry,No Flights Found!!!</h5>
+      </div>
+    </div>
+  </div>
+</div>

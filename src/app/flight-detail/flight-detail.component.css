@@ -1,0 +1,30 @@
+.airlines {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.flightDetail{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 12px;
+    justify-content: space-around;
+    align-items: center;
+}
+.airlines h5 {
+    margin:0;
+    font-size: 1.11rem;
+    color: #0808af;
+}
+
+.airlines h6{
+    font-style: italic;
+    color: #970202;
+}
+.priceButton {
+       text-align: center;
+}
+.airlines small {
+    color: #db1354;
+    font-weight: bold;
+}

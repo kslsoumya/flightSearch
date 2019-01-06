@@ -1,0 +1,39 @@
+.navbar {
+background-color: rgba(213, 13, 13, 0.69);
+}
+.results {
+    margin-bottom: 1.5rem;
+}
+.formWidth {
+    width: 100%;
+}
+.flightForm{
+    margin-top: 4vh;
+}
+.ng5-slider {
+    width:40vw;
+    margin-bottom: 2rem;
+}
+.basicDetails {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.roundTrip {
+    display: flex;
+    flex-direction: row;
+    margin: 12px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.centre {
+    text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+    .ng5-slider {
+      width: 80vw;
+    }
+  }
